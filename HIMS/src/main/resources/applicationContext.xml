@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--0.Spring注解扫描-->
+    <context:component-scan base-package="com.hims.service.*,com.hims.filter"/>
+
+    <!--1.加载数据库配置文件-->
+    <context:property-placeholder location="classpath*:jdbc.properties" file-encoding="utf-8"/>
+
+    <!--2.德鲁伊数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+    </bean>
+
+    <!--3.配置SqlSessionFactory
+        SqlSessionFactoryBean > MyBatisSqlSessionFactoryBean
+    -->
+    <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置别名(统一取别名)-->
+        <property name="typeAliasesPackage" value="com.hims.pojo"/>
+        <!--加载MyBatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!--4.Spring框架扫描mapper层(底层把Mapper层已经代理完毕，生了对象放入SpringIOC容器中)-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hims.mapper"/>
+    </bean>
+
+    <!--5.MyBatis平台事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+   <!--6.开启声明式事务注解支持-->
+   <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--配置个AOP的自动代理 -->
+    <aop:aspectj-autoproxy/>
+
+    <!--SpringSecurity的配置文件需要加载到Spring容器中，所以可以通过import来导入-->
+    <import resource="classpath:spring-security.xml"/>
+
+</beans>

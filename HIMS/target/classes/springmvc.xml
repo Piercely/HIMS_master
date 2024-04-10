@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/security
+       https://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--SpringMvc包扫描：扫描控制层-->
+    <context:component-scan base-package="com.hims.controller,com.hims.advice"/>
+
+    <!--配置一个JSP视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--视图路径前缀-->
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <!--视图路径后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 静态资源交个tomcat中默认servlet处理，SpringMvc不拦截管理 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 配置文件上传解析器 -->
+    <!-- id 的值是固定的-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸为 5MB  默认字节单位
+           8bit=1byte
+           1024byte=1kb
+         -->
+        <property name="maxUploadSize">
+            <value>5242880</value>
+        </property>
+    </bean>
+
+    <!--使用自定义转换器-->
+    <mvc:annotation-driven/>
+
+    <!--配置个AOP的自动代理 -->
+    <aop:aspectj-autoproxy/>
+
+    <!--
+         开启权限控制注解支持
+         jsr250-annotations="enabled"表示支持jsr250-api的注解，需要jsr250-api的jar包
+         pre-post-annotations="enabled"表示支持spring表达式注解
+         secured-annotations="enabled"这才是SpringSecurity提供的注解
+      -->
+    <security:global-method-security jsr250-annotations="enabled"
+                                     pre-post-annotations="enabled"
+                                     secured-annotations="enabled"/>
+
+</beans>

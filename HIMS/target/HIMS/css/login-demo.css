@@ -1,0 +1,164 @@
+.layui-row {
+    margin: 60px 140px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px 0;
+}
+
+.footer p {
+    text-align: center;
+    color: #444;
+}
+
+#login-form {
+    background-color: rgba(255, 255, 255, 0.8);
+    filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#C8FFFF, endcolorstr=#C8FFFF);
+    position: relative;
+    padding: 30px 30px 10px;
+}
+
+.login-switch-tabs {
+    margin-bottom: 20px;
+}
+
+#login-form .login-bottom {
+    border-top: 1px #eee solid;
+    padding: 10px 0 5px;
+    color: #444;
+}
+
+.tab {
+    display: inline-block;
+    float: left;
+    height: 34px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: opacity 0.3s;
+}
+
+.tab:not(.tab-selected):hover {
+    opacity: 0.7;
+}
+
+.tab:not(:first-child) {
+    margin-left: 1em;
+}
+
+.tab-selected {
+    border-bottom: 2px solid #000;
+}
+
+.login-switch-tabs {
+    margin-bottom: 20px;
+}
+
+.login-switch-item {
+    color: #999999;
+    position: relative;
+}
+
+.login-switch-item:hover {
+    color: #3c3c3c;
+}
+
+.tab-selected.login-switch-item {
+    border-bottom: 2px solid #000;
+    font-weight: 700;
+    color: #3c3c3c;
+}
+
+.login-switch-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    width: 2px;
+    top: 12px;
+    height: 12px;
+    background: #c3c3c3;
+    margin-top: -6px;
+}
+
+.layui-form-item {
+    margin-bottom: 15px;
+    clear: both;
+    *zoom: 1
+}
+
+.layui-form-item:after {
+    content: '\20';
+    clear: both;
+    *zoom: 1;
+    display: block;
+    height: 0
+}
+
+body, form, p {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.layui-form-label, .layui-form-mid, .layui-form-select, .layui-input-block, .layui-input-inline, .layui-textarea {
+    position: relative
+}
+
+.submit {
+    background-color: #31aa9e;
+    color: white;
+    width: 100px;
+    height: 45px;
+    border: 0;
+    font-size: 16px;
+    box-sizing: content-box;
+    border-radius: 5px;
+}
+
+submit:hover {
+    background-color: #31aa9e;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table caption {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 1em 0;
+}
+
+th, td {
+    border: 1px solid #999;
+    text-align: center;
+    padding: 20px 0;
+}
+
+table thead tr {
+    background-color: #008c8c;
+    color: #fff;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+table tbody tr:hover {
+    background-color: #ccc;
+}
+
+table tbody tr td:first-child {
+    color: #f40;
+}
+
+table tfoot tr td {
+    text-align: right;
+    padding-right: 20px;
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/security
+       https://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--直接释放无需经过SpringSecurity过滤器的静态资源-->
+    <security:http pattern="/assets/**" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/documents/**" security="none"/>
+    <security:http pattern="/fonts/**" security="none"/>
+    <security:http pattern="/images/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/favicon.ico" security="none"/>
+
+    <!--
+    设置可以用spring的el表达式配置Spring Security并自动生成对应配置组件（过滤器）
+    auto-config="true" 表示自动加载SpringSecurity的配置文件
+    use-expressions="true" 支持Spring的EL表达式
+ -->
+    <security:http auto-config="true" use-expressions="true">
+
+        <!--指定login.jsp页面可以被匿名访问 -->
+        <security:intercept-url pattern="/login.jsp" access="permitAll()"/>
+        <security:intercept-url pattern="/getCode" access="permitAll()"/>
+
+        <!--自定义过滤器-->
+        <security:custom-filter ref="checkCodeFilter" before="FORM_LOGIN_FILTER"></security:custom-filter>
+
+        <security:intercept-url pattern="/to_drugs-repercussion" access="hasAnyRole('ROLE_医生')"/>
+
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_患者','ROLE_护士','ROLE_医生','ROLE_服务前台','ROLE_系统管理员','ROLE_超级管理员')"></security:intercept-url>
+
+        <!--指定自定义的认证页面-->
+        <security:form-login login-page="/login.jsp"
+                             login-processing-url="/login"
+                             authentication-success-forward-url="/home"
+                             authentication-failure-handler-ref="myFailureHandler" />
+
+        <!--关闭CSRF true  false 开启-->
+        <security:csrf disabled="true"/>
+
+        <!--没有权限的异常处理页面-->
+        <security:access-denied-handler error-page="/norights.jsp"/>
+
+        <!--表示该页面可以在相同域名页面的 frame 中展示
+        -->
+        <security:headers>
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+
+    </security:http>
+
+    <!--加密算法对象-->
+    <bean id="encoder" class="com.hims.encode.MyMD5PasswordEncoder"/>
+
+    <!--配置模拟的认证数据源-->
+    <!-- 设置置Spring Security认证用户来源  noop：SpringSecurity中默认 密码验证是要加密的  noop表示不加密 -->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userServiceImpl">
+            <security:password-encoder ref="encoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+</beans>
